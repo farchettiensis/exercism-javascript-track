@@ -17,22 +17,120 @@ export const promisify = (fn) => {
   }
 };
 
-export const all = () => {
-  throw new Error('Remove this statement and implement this function');
+export const all = (promises) => {
+  return new Promise((resolve, reject) => {
+    if (!promises) {
+      resolve(undefined);
+      return;
+    }
+
+    const results = [];
+    let completedPromises = 0;
+
+    if (!promises.length) {
+      resolve(results);
+      return;
+    }
+
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise)
+        .then((value) => {
+          results[index] = value;
+          completedPromises++;
+
+          if (completedPromises === promises.length) {
+            resolve(results);
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  });
 };
 
-export const allSettled = () => {
-  throw new Error('Remove this statement and implement this function');
+export const allSettled = (promises) => {
+  return new Promise((resolve) => {
+    if (!promises) {
+      resolve(undefined);
+      return;
+    }
+
+    if (!promises.length) {
+      resolve([]);
+    }
+
+    const results = [];
+    let completedPromises = 0;
+
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise)
+        .then((value) => {
+          results[index] = value;
+        })
+        .catch((reason) => {
+          results[index] = reason;
+        })
+        .finally(() => {
+          completedPromises++;
+          if (completedPromises === promises.length) {
+            resolve(results);
+          }
+        });
+    });
+  });
 };
 
-export const race = () => {
-  throw new Error('Remove this statement and implement this function');
+export const race = (promises) => {
+  return new Promise((resolve, reject) => {
+    if (!promises) {
+      resolve(undefined);
+      return;
+    }
+
+    if (!promises.length) {
+      resolve([]);
+    }
+
+    promises.forEach((promise) => {
+      Promise.resolve(promise)
+        .then(resolve)
+        .catch(reject);
+    });
+  });
 };
 
-export const any = () => {
-  throw new Error('Remove this statement and implement this function');
+export const any = (promises) => {
+  return new Promise((resolve, reject) => {
+    if (!promises) {
+      resolve(undefined);
+    }
+
+    if (!promises.length) {
+      resolve([]);
+    }
+
+    const errors = [];
+    let rejectedPromises = 0;
+
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise)
+        .then((value) => {
+          resolve(value);
+        })
+        .catch((reason) => {
+          errors[index] = reason;
+          rejectedPromises++;
+
+          if (rejectedPromises === promises.length) {
+            reject(errors);
+          }
+        });
+    });
+  });
 };
 
+// output tests
 const fetchProduct = (productId, callback) => {
   setTimeout(() => {
     if (!productId) {
