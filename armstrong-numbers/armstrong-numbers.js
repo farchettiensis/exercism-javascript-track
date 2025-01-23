@@ -4,8 +4,13 @@
 //
 
 export const isArmstrongNumber = (number) => {
-  const digitsInNumber = Math.abs(number).toString().length;
-  const digits = [...Math.abs(number).toString()].map(digit => parseInt(digit));
+  const numStr = number.toString();
+  const digitsInNumber = numStr.length;
 
-  return digits.reduce((sum, digit) => sum + Math.pow(digit, digitsInNumber), 0) === number;
+  const sum = [...numStr].reduce((acc, digit) => {
+    const digitBigInt = BigInt(digit);
+    return acc + digitBigInt ** BigInt(digitsInNumber);
+  }, 0n);
+
+  return sum === BigInt(number);
 };
