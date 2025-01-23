@@ -4,10 +4,10 @@
 //
 
 export const isArmstrongNumber = (number) => {
-  const numStr = number.toString();
-  const digitsInNumber = numStr.length;
+  const absNumberString = number.toString().replace('-', '');
+  const digitsInNumber = absNumberString.length;
 
-  const sum = [...numStr].reduce((acc, digit) => {
+  const sum = [...absNumberString].reduce((acc, digit) => {
     const digitBigInt = BigInt(digit);
     return acc + digitBigInt ** BigInt(digitsInNumber);
   }, 0n);
