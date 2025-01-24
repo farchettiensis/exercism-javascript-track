@@ -8,6 +8,15 @@ export const translate = (rna) => {
     return [];
   }
 
+  // Fails one test
+  // if (rna.length % 3 !== 0) {
+  //   throw new Error('Invalid codon');
+  // }
+
+  if (/[^AUGC]/.test(rna)) {
+    throw new Error('Invalid codon');
+  }
+
   const codonToProtein = {
     AUG: 'Methionine',
     UUU: 'Phenylalanine',
@@ -29,7 +38,7 @@ export const translate = (rna) => {
   };
 
   const proteinSequence = [];
-  const codons = rna.match(/.{1,3}/g);
+  const codons = rna.match(/.{1,3}/g) || [];
 
   for (const codon of codons) {
     if (!codonToProtein[codon]) {

@@ -1,5 +1,5 @@
-import { describe, expect, test, xtest } from '@jest/globals';
-import { translate } from './protein-translation';
+import {describe, expect, test} from '@jest/globals';
+import {translate} from './protein-translation';
 
 describe('ProteinTranslation', () => {
   test('Empty RNA has no proteins', () => {
