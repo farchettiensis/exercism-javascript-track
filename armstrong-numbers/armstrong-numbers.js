@@ -13,12 +13,11 @@ export const isArmstrongNumber = (number) => {
 
   const useBigInt = number > Number.MAX_SAFE_INTEGER;
   const base = useBigInt ? BigInt : Number;
-  const initialAcc = useBigInt ? 0n : 0;
 
   const sum = [...numberString].reduce((acc, digit) => {
     const digitValue = base(digit);
     return acc + digitValue ** base(digitsInNumber);
-  }, initialAcc);
+  }, useBigInt ? 0n : 0);
 
   return sum === base(number);
 };
