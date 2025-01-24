@@ -4,13 +4,21 @@
 //
 
 export const isArmstrongNumber = (number) => {
-  const absNumberString = number.toString().replace('-', '');
-  const digitsInNumber = absNumberString.length;
+  if (number < 0) {
+    return false;
+  }
 
-  const sum = [...absNumberString].reduce((acc, digit) => {
-    const digitBigInt = BigInt(digit);
-    return acc + digitBigInt ** BigInt(digitsInNumber);
-  }, 0n);
+  const numberString = number.toString();
+  const digitsInNumber = numberString.length;
 
-  return sum === BigInt(number);
+  const useBigInt = number > Number.MAX_SAFE_INTEGER;
+  const base = useBigInt ? BigInt : Number;
+  const initialAcc = useBigInt ? 0n : 0;
+
+  const sum = [...numberString].reduce((acc, digit) => {
+    const digitValue = base(digit);
+    return acc + digitValue ** base(digitsInNumber);
+  }, initialAcc);
+
+  return sum === base(number);
 };
