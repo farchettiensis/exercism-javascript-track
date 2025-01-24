@@ -4,22 +4,21 @@
 //
 
 export const isValid = (isbn) => {
-  const isbnParsed = isbn.replace(/-/g, '');
+  const parsedIsbn = isbn.replace(/-/g, '');
 
-  if (isbnParsed.length !== 10) return false;
+  if (parsedIsbn.length !== 10) return false;
 
-  let sum = 0;
+  let weightedSum = 0;
+
   for (let i = 0; i < 10; i++) {
-    const digit = isbnParsed[i];
+    const currentDigit = parsedIsbn[i];
 
-    const checkChar = digit === 'X' && i === 9 ? 10 : parseInt(digit);
+    const checkDigit = (currentDigit === 'X' && i === 9) ? 10 : parseInt(currentDigit);
 
-    if (isNaN(checkChar)) return false;
+    if (isNaN(checkDigit)) return false;
 
-    sum += (10 - i) * checkChar;
+    weightedSum += (10 - i) * checkDigit;
   }
 
-  return sum % 11 === 0;
+  return weightedSum % 11 === 0;
 };
-
-console.log(isValid('3598215088'));
