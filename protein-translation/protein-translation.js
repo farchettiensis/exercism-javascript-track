@@ -3,53 +3,49 @@
 // convenience to get you started writing code faster.
 //
 
+const codonToProtein = {
+  AUG: 'Methionine',
+  UUU: 'Phenylalanine',
+  UUC: 'Phenylalanine',
+  UUA: 'Leucine',
+  UUG: 'Leucine',
+  UCU: 'Serine',
+  UCC: 'Serine',
+  UCA: 'Serine',
+  UCG: 'Serine',
+  UAU: 'Tyrosine',
+  UAC: 'Tyrosine',
+  UGU: 'Cysteine',
+  UGC: 'Cysteine',
+  UGG: 'Tryptophan',
+  UAA: 'STOP',
+  UAG: 'STOP',
+  UGA: 'STOP',
+};
+
 export const translate = (rna) => {
   if (!rna) {
     return [];
   }
 
-  // Fails one test
-  // if (rna.length % 3 !== 0) {
-  //   throw new Error('Invalid codon');
-  // }
-
   if (/[^AUGC]/.test(rna)) {
     throw new Error('Invalid codon');
   }
-
-  const codonToProtein = {
-    AUG: 'Methionine',
-    UUU: 'Phenylalanine',
-    UUC: 'Phenylalanine',
-    UUA: 'Leucine',
-    UUG: 'Leucine',
-    UCU: 'Serine',
-    UCC: 'Serine',
-    UCA: 'Serine',
-    UCG: 'Serine',
-    UAU: 'Tyrosine',
-    UAC: 'Tyrosine',
-    UGU: 'Cysteine',
-    UGC: 'Cysteine',
-    UGG: 'Tryptophan',
-    UAA: 'STOP',
-    UAG: 'STOP',
-    UGA: 'STOP',
-  };
 
   const proteinSequence = [];
   const codons = rna.match(/.{1,3}/g) || [];
 
   for (const codon of codons) {
-    if (!codonToProtein[codon]) {
-      throw new Error('Invalid codon');
-    }
+    const protein = codonToProtein[codon] ||
+      (() => {
+        throw new Error('Invalid codon');
+      })();
 
-    if (codonToProtein[codon] === 'STOP') {
+    if (protein === 'STOP') {
       break;
     }
 
-    proteinSequence.push(codonToProtein[codon]);
+    proteinSequence.push(protein);
   }
 
   return proteinSequence;
