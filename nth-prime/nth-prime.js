@@ -4,32 +4,37 @@
 //
 
 export const prime = (nthPrime) => {
-  if (nthPrime === 0) {
+  if (nthPrime < 1) {
     throw new Error('there is no zeroth prime');
   }
 
-  const limit = nthPrime > 6
-      ? Math.ceil(nthPrime * (Math.log(nthPrime) + Math.log(Math.log(nthPrime))))
-      : 15;
+  const primes = [];
+  let currentNumber = 2;
 
-  const primes = sieve(limit);
+  while (primes.length < nthPrime) {
+    if (isPrime(currentNumber, primes)) {
+      primes.push(currentNumber);
+    }
+    currentNumber++;
+  }
 
   return primes[nthPrime - 1];
 };
 
-const sieve = (max) => {
-  const isPrime = Array(max + 1).fill(true);
-  isPrime[0] = isPrime[1] = false;
+const isPrime = (num, primes) => {
+  if (num < 2) {
+    return false;
+  }
 
-  for (let i = 2; i <= Math.sqrt(max); i++) {
-    if (isPrime[i]) {
-      for (let j = i * i; j <= max; j += i) {
-        isPrime[j] = false;
-      }
+  for (const primeNum of primes) {
+    if (primeNum > Math.sqrt(num)) {
+      break;
+    }
+    if (num % primeNum === 0) {
+      return false;
     }
   }
 
-  return isPrime.map((val, index) => (val ? index : null)).filter((val) => val !== null);
+  return true;
 };
-
 
